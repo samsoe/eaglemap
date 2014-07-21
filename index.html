@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Full Screen Map</title>
+  <link rel="stylesheet" type="text/css"
+      href="http://fonts.googleapis.com/css?family=Roboto">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+
+  <div id="footer">
+    <div id="flash" class="info"></div>
+    <div>
+      <h1>Full Screen Map</h1>
+      <p>This map is a base for future/present projects
+        <a href="/">X</a> with
+        <a href="https://developers.google.com/maps/">Maps API</a> and <a id="" href="">Panel Slider</a>.
+      </p>
+      <a href="/">
+        <img src="https://raw.github.com/github/media/master/octocats/blacktocat-32.png">
+      </a>
+    </div>
+  </div>
+
+  <div id="map-canvas"></div>
+
+  <a id="my-link" href="#my-panel"><img src="img/menu_icon.png"></a>
+  <div id="my-panel" class="panel">
+    <h1>Menu</h1>
+    <p><img id="panel-close" src="img/menu_icon_grey.png"></p>
+    <ul>
+      <li>one</li>
+      <li>two</li>
+    </ul>
+  </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/jquery.panelslider.min.js"></script>
+  <script>
+    $('#my-link').panelslider({clickClose: false});
+
+    $('#panel-close').click(function() {
+      $.panelslider.close();
+    });
+  </script>
+</body>
+</html>
+
