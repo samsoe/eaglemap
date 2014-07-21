@@ -105,4 +105,26 @@ a {
 
 ul {
   display: inline-block;
+  list-style-type: none;
+  padding-left: 15px;
+  width: 199px;
+}
+
+li {
+  font-size: 17px;
+  padding: 3px;
+  padding-left: 5px;
+}
+
+.active, li:hover {
+  color: white;
+  cursor: default;
+}
+
+li:hover {
+  background-color: lightgray;
+}
+
+.active {
+  background-color: gray;
 }
