@@ -1,4 +1,8 @@
+/*** eagle map w/ git ***/
+
 var map;
+var data = [];
+
 function initialize() {
 	var mapOptions = {
 		zoom: 9,
@@ -65,7 +69,7 @@ $('#initial-load').on("click", function() {
 		}, function (data0) {
 		  data = data0;
 		  loaded = true;
-		  alert("Full Runthrough");
+		  alert("Movebank Data Load Function Complete");
 		});
 	} else {
 		alert('Movebank Data Loaded.')
