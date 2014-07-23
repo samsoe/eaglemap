@@ -60,10 +60,9 @@ a {
 #footer #flash.error {
   color: red;
 }
+
 #footer img {
   position: absolute;
-  bottom: 1.5em;
-  right: 1em;
 }
 
 .panel {
@@ -127,4 +126,19 @@ li:hover {
 
 .active {
   background-color: gray;
+}
+
+#mpg {
+  bottom: 1.6em;
+  right: 1em;
+}
+
+#raptorview {
+  right: 6.5em;
+  bottom: 1em;
+}
+
+#movebank {
+  right: 15.7em;
+  bottom: 1.8em;
 }
