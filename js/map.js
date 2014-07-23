@@ -46,16 +46,19 @@ var individual_local_identifiers = [117188, 117410, 126401, 126402, 126403, 1264
 var individual_local_names = ["117188", "117410", "126401", "126402", "126403", "126404", "126405", "126406", "126407"];
 var colors = ["purple", "red", "yellow", "blue", "green", "orange", "pink", "lightblue", "brown"];
 
-var timespan = 2; // months
+var timespan = 10; // days
 var date = new Date();
 var timestamp_end = date.getTime();
 var date_start = new Date();
-date_start = date_start.setMonth(date_start.getMonth() - timespan);
+date_start = date_start.setDate(date_start.getDate() - timespan);
 var timestamp_start = date_start;
 
-var max_events_per_individual = 1;
+var max_events_per_individual;
+var loaded = false;
 
 $('#initial-load').on("click", function() {
+	data = [];
+	max_events_per_individual = 1;
 	$.getJSON(jsonUrl + "?callback=?", {
 	  study_id: study_id,
 	  individual_local_identifiers: individual_local_identifiers,
@@ -66,7 +69,50 @@ $('#initial-load').on("click", function() {
 	  sensor_type: "gps"
 }, function (data0) {
 	data = data0;
-	$('#initial-load').css("display","none");
+
+	/* more loading */
+	for (i = 0; i < data.individuals.length; i++) {
+		data.individuals[i].color = colors[i];
+		//data.individuals[i].name = name[i]; // no eagle names so far
+	}
+
+	createMarkers();
+	createPolylines();
+	showCurrent();                
+
+	startDate = null;
+	endDate = null;
+	for (i = 0; i < data.individuals.length; i++) {
+	    for (j = 0; j < data.individuals[i].locations.length; j++) {
+	        ts = data.individuals[i].locations[j].timestamp;
+	        if (startDate != null) {
+	            startDate = Math.min(startDate, ts);
+	            endDate = Math.max(endDate, ts);
+	        } else {
+	            startDate = ts;
+	            endDate = ts;
+	        }
+	    }
+	}
+	for (i = 0; i < data.individuals.length; i++)
+	    showClosestPointInTime(data.individuals[i], endDate);
+
+	});
+});
+
+$('#multi-day').on("click", function() {
+	data = [];
+	max_events_per_individual = 700;
+	$.getJSON(jsonUrl + "?callback=?", {
+	  study_id: study_id,
+	  individual_local_identifiers: individual_local_identifiers,
+	  individual_local_names: individual_local_names,
+	  max_events_per_individual : max_events_per_individual,
+	  timestamp_start: timestamp_start,
+	  timestamp_end: timestamp_end,
+	  sensor_type: "gps"
+}, function (data0) {
+	data = data0;
 
 	/* more loading */
 	for (i = 0; i < data.individuals.length; i++) {
@@ -353,8 +399,33 @@ function formatTimestamp(timestamp) {
     return mm + "-" + dd + "-" + yyyy;
 }
 
+function getPointClosestToLine(x1, y1, x2, y2, x3, y3) {
+    dx = x2 - x1;
+    dy = y2 - y1;
+    if ((dx == 0) && (dy == 0)) {
+        x0 = x1;
+        y0 = y1;
+    } else {
+        t = ((x3 - x1) * dx + (y3 - y1) * dy) / (dx * dx + dy * dy);
+        t = Math.min(Math.max(0, t), 1);
+        x0 = x1 + t * dx;
+        y0 = y1 + t * dy;
+    }
+    return {
+        x: x0,
+        y: y0
+    };
+}
+
+Date.prototype.getDOY = function() {
+var onejan = new Date(this.getFullYear(),0,1);
+return Math.ceil((this - onejan) / 86400000);
+}
+
 
 /*** Buttons ***/
+
+
 $('li').on("click", function(){
 	$(this).toggleClass("active");
 });
