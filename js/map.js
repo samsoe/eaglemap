@@ -7,6 +7,24 @@
 var map;
 var data;
 
+/*** MOVEBANK ***/
+
+
+var jsonUrl = "http://www.movebank.org/movebank/service/public/json";
+var study_id = 17707607;
+var individual_local_identifiers = [117188, 117410, 126401, 126402, 126403, 126404, 126405, 126406, 126407];
+var individual_local_names = ["117188", "117410", "126401", "126402", "126403", "126404", "126405", "126406", "126407"];
+var colors = ["purple", "red", "yellow", "blue", "green", "orange", "pink", "lightblue", "brown"];
+
+var days = 0;
+var now = new Date();
+var timestamp_start = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay() - days);
+var timestamp_end = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay());
+
+
+var max_events_per_individual = 900;
+var loaded = false;
+
 $(document).ready(function($) {
 	var mapOptions = {
 		zoom: 9,
@@ -34,115 +52,53 @@ $(document).ready(function($) {
 	};
 
 	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    movebankLoad(1);
 });
 
 
-/*** MOVEBANK ***/
-
-
-var jsonUrl = "http://www.movebank.org/movebank/service/public/json";
-var study_id = 17707607;
-var individual_local_identifiers = [117188, 117410, 126401, 126402, 126403, 126404, 126405, 126406, 126407];
-var individual_local_names = ["117188", "117410", "126401", "126402", "126403", "126404", "126405", "126406", "126407"];
-var colors = ["purple", "red", "yellow", "blue", "green", "orange", "pink", "lightblue", "brown"];
-
-var timespan = 10; // days
-var date = new Date();
-var timestamp_end = date.getTime();
-var date_start = new Date();
-date_start = date_start.setDate(date_start.getDate() - timespan);
-var timestamp_start = date_start;
-
-var max_events_per_individual;
-var loaded = false;
-
-$('#initial-load').on("click", function() {
-	data = [];
-	max_events_per_individual = 1;
-	$.getJSON(jsonUrl + "?callback=?", {
-	  study_id: study_id,
-	  individual_local_identifiers: individual_local_identifiers,
-	  individual_local_names: individual_local_names,
-	  max_events_per_individual : max_events_per_individual,
-	  timestamp_start: timestamp_start,
-	  timestamp_end: timestamp_end,
-	  sensor_type: "gps"
+function movebankLoad(days) {
+    timestamp_start = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay() - days);
+    
+    $.getJSON(jsonUrl + "?callback=?", {
+      study_id: study_id,
+      individual_local_identifiers: individual_local_identifiers,
+      individual_local_names: individual_local_names,
+      max_events_per_individual : max_events_per_individual,
+      timestamp_start: timestamp_start,
+      timestamp_end: timestamp_end,
+      sensor_type: "gps"
 }, function (data0) {
-	data = data0;
+    data = data0;
 
-	/* more loading */
-	for (i = 0; i < data.individuals.length; i++) {
-		data.individuals[i].color = colors[i];
-		//data.individuals[i].name = name[i]; // no eagle names so far
-	}
+    /* more loading */
+    for (i = 0; i < data.individuals.length; i++) {
+        data.individuals[i].color = colors[i];
+        //data.individuals[i].name = name[i]; // no eagle names so far
+    }
 
-	createMarkers();
-	createPolylines();
-	showCurrent();                
+    createMarkers();
+    createPolylines();
+    showCurrent();                
 
-	startDate = null;
-	endDate = null;
-	for (i = 0; i < data.individuals.length; i++) {
-	    for (j = 0; j < data.individuals[i].locations.length; j++) {
-	        ts = data.individuals[i].locations[j].timestamp;
-	        if (startDate != null) {
-	            startDate = Math.min(startDate, ts);
-	            endDate = Math.max(endDate, ts);
-	        } else {
-	            startDate = ts;
-	            endDate = ts;
-	        }
-	    }
-	}
-	for (i = 0; i < data.individuals.length; i++)
-	    showClosestPointInTime(data.individuals[i], endDate);
+    startDate = null;
+    endDate = null;
+    for (i = 0; i < data.individuals.length; i++) {
+        for (j = 0; j < data.individuals[i].locations.length; j++) {
+            ts = data.individuals[i].locations[j].timestamp;
+            if (startDate != null) {
+                startDate = Math.min(startDate, ts);
+                endDate = Math.max(endDate, ts);
+            } else {
+                startDate = ts;
+                endDate = ts;
+            }
+        }
+    }
+    for (i = 0; i < data.individuals.length; i++)
+        showClosestPointInTime(data.individuals[i], endDate);
 
-	});
-});
-
-$('#multi-day').on("click", function() {
-	data = [];
-	max_events_per_individual = 700;
-	$.getJSON(jsonUrl + "?callback=?", {
-	  study_id: study_id,
-	  individual_local_identifiers: individual_local_identifiers,
-	  individual_local_names: individual_local_names,
-	  max_events_per_individual : max_events_per_individual,
-	  timestamp_start: timestamp_start,
-	  timestamp_end: timestamp_end,
-	  sensor_type: "gps"
-}, function (data0) {
-	data = data0;
-
-	/* more loading */
-	for (i = 0; i < data.individuals.length; i++) {
-		data.individuals[i].color = colors[i];
-		//data.individuals[i].name = name[i]; // no eagle names so far
-	}
-
-	createMarkers();
-	createPolylines();
-	showCurrent();                
-
-	startDate = null;
-	endDate = null;
-	for (i = 0; i < data.individuals.length; i++) {
-	    for (j = 0; j < data.individuals[i].locations.length; j++) {
-	        ts = data.individuals[i].locations[j].timestamp;
-	        if (startDate != null) {
-	            startDate = Math.min(startDate, ts);
-	            endDate = Math.max(endDate, ts);
-	        } else {
-	            startDate = ts;
-	            endDate = ts;
-	        }
-	    }
-	}
-	for (i = 0; i < data.individuals.length; i++)
-	    showClosestPointInTime(data.individuals[i], endDate);
-
-	});
-});
+    });
+}
 
 function createMarkers() {
     for (i = 0; i < data.individuals.length; i++) {
@@ -417,14 +373,15 @@ function getPointClosestToLine(x1, y1, x2, y2, x3, y3) {
     };
 }
 
-Date.prototype.getDOY = function() {
-var onejan = new Date(this.getFullYear(),0,1);
-return Math.ceil((this - onejan) / 86400000);
-}
 
+/*** Click Events ***/
+$('#initial-load').on("click", function() {
+    movebankLoad(1);
+});
 
-/*** Buttons ***/
-
+$('#multi-day').on("click", function() {
+    movebankLoad(90);
+});
 
 $('li').on("click", function(){
 	$(this).toggleClass("active");
