@@ -259,7 +259,7 @@ function updateInfo(individual) {
             ts = tsFirst;
         if (ts > tsLast)
             ts = tsLast;
-        individual.info.setContent("<div style='width:101px;height:40px;'><b>" + individual.name + "</b>" + "<br>" + "Date: " + formatTimestamp(ts) + "</div>");
+        individual.info.setContent("<div style='width:101px;height:40px;'><b>" + individual['individual_local_identifier'] + "</b>" + "<br>" + "Date: " + formatTimestamp(ts) + "</div>");
     }
 }
 
