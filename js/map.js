@@ -16,13 +16,12 @@ var individual_local_identifiers = [117188, 117410, 126401, 126402, 126403, 1264
 var individual_local_names = ["117188", "117410", "126401", "126402", "126403", "126404", "126405", "126406", "126407"];
 var colors = ["purple", "red", "yellow", "blue", "green", "orange", "pink", "lightblue", "brown"];
 
-var days = 0;
+var days = 1;
 var now = new Date();
-var timestamp_start = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay() - days);
-var timestamp_end = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay());
+var timestamp_end = now.setDate(now.getDate() - 3);
+var timestamp_start = now.setDate(now.getDate() - days);
 
-
-var max_events_per_individual = 900;
+var max_events_per_individual = 90;
 var loaded = false;
 
 $(document).ready(function($) {
@@ -326,7 +325,7 @@ function showClosestPointInSpace(individual, latLng, snapToPoint) {
     for (i = 0; i < data.individuals.length; i++)
         if (data.individuals[i] != individual)
             showClosestPointInTime(data.individuals[i], t);
-    $('#time-display').datepicker('setDate', new Date(t));
+    /*$('#time-display').datepicker('setDate', new Date(t));*/
 }
 
 function formatTimestamp(timestamp) {
