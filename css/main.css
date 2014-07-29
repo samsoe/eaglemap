@@ -142,3 +142,7 @@ li:hover {
   right: 15.7em;
   bottom: 1.8em;
 }
+
+#birds li {
+  width: 176px;
+}

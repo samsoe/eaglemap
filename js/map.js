@@ -21,12 +21,12 @@ var now = new Date();
 var timestamp_end = now.setDate(now.getDate() - 3);
 var timestamp_start = now.setDate(now.getDate() - days);
 
-var max_events_per_individual = 90;
+var max_events_per_individual = 1;
 var loaded = false;
 
 $(document).ready(function($) {
 	var mapOptions = {
-		zoom: 9,
+		zoom: 3,
 		center: new google.maps.LatLng(46.692, -114.015),
 		mapTypeId: google.maps.MapTypeId.TERRAIN,
 		mapTypeControl: true,
@@ -51,11 +51,11 @@ $(document).ready(function($) {
 	};
 
 	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    movebankLoad(1);
+    movebankLoad(days, max_events_per_individual);
 });
 
 
-function movebankLoad(days) {
+function movebankLoad(days, max_events_per_individual) {
     timestamp_start = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay() - days);
     
     $.getJSON(jsonUrl + "?callback=?", {
@@ -138,6 +138,7 @@ function setBounds() {
         }
     }
     map.fitBounds(bounds);
+    map.setZoom(map.getZoom()-1);
 }
 
 function createPolylines() {
@@ -372,14 +373,23 @@ function getPointClosestToLine(x1, y1, x2, y2, x3, y3) {
     };
 }
 
+function displayBirds() {
+    for (i=0;i<data.individuals.length;i++){
+        $('#birds').append('<li>' + data.individuals[i]['individual_local_identifier'] + '</li');
+    }
+}
 
-/*** Click Events ***/
-$('#initial-load').on("click", function() {
-    movebankLoad(1);
+var birds_loaded = false;
+$('.show').on("click", function() {
+    if (!birds_loaded) {
+        displayBirds();
+        birds_loaded = true;
+    };
+    $('#birds').slideToggle('fast');
 });
 
 $('#multi-day').on("click", function() {
-    movebankLoad(90);
+    movebankLoad(30, 3000);
 });
 
 $('li').on("click", function(){
