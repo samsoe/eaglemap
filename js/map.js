@@ -54,7 +54,6 @@ $(document).ready(function($) {
     movebankLoad(days, max_events_per_individual);
 });
 
-
 function movebankLoad(days, max_events_per_individual) {
     timestamp_start = Date.UTC(now.getFullYear(), now.getMonth(), now.getDay() - days);
     
@@ -163,9 +162,8 @@ function createPolylines() {
             strokeColor: data.individuals[i].color,
             strokeOpacity: 0.5,
             strokeWeight: 3
-            //icons : icons
         });
-        //data.individuals[i].polyline.setMap(null);
+        
         google.maps.event.addListener(data.individuals[i].polyline, 'click', (function (
             individual) {
             return function (e) {
@@ -174,7 +172,7 @@ function createPolylines() {
             };
         })(data.individuals[i]));
 
-        console.log(data.individuals[i].locations.length);
+        //console.log(data.individuals[i].locations.length);
     }
 }
 
@@ -375,9 +373,29 @@ function getPointClosestToLine(x1, y1, x2, y2, x3, y3) {
 
 function displayBirds() {
     for (i=0;i<data.individuals.length;i++){
-        $('#birds').append('<li>' + data.individuals[i]['individual_local_identifier'] + '</li');
+        $('#birds').append('<li onclick="markerClick(' + i + ');">' + data.individuals[i]['individual_local_identifier'] + '</li');
     }
 }
+
+function hideCurrent() {
+    for (i = 0; i < data.individuals.length; i++) {
+        data.individuals[i].marker.setVisible(false);
+        data.individuals[i].polyline.setMap(null);
+    }
+}
+
+function markerClick(id) {
+    google.maps.event.trigger(data.individuals[id].marker, 'click');
+}
+
+$('#current').on('click', function() {
+    if($('#current').hasClass('active')) {
+        hideCurrent();
+    } else {
+        showCurrent();
+        setBounds();
+    }
+});
 
 var birds_loaded = false;
 $('.show').on("click", function() {
@@ -389,7 +407,11 @@ $('.show').on("click", function() {
 });
 
 $('#multi-day').on("click", function() {
-    movebankLoad(30, 3000);
+    hideCurrent();
+    if(!$(this).hasClass('active')) {
+        $('#current').removeClass("active");
+        movebankLoad(30, 3000);
+    }
 });
 
 $('li').on("click", function(){
