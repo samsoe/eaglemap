@@ -425,7 +425,9 @@ $('#multi-day').on("click", function() {
 });
 
 $('#birds li').click(function() {
-    markerClick($(this).index());
+    var i = $(this).index();
+    map.setCenter(new google.maps.LatLng(data.individuals[i].locations[0]['location_lat'], data.individuals[i].locations[0]['location_long']))
+    markerClick(i);
 });
 
 $('#birds li').on('mouseover', function() {
