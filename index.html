@@ -30,18 +30,31 @@
   <div id="my-panel" class="panel">
     <h1>Menu</h1>
     <p><img id="panel-close" src="img/menu_icon_grey.png"></p>
-    <ul>
-      <li class="show">Show Individuals</li>
-        <ul id="birds" style="display:none"></ul>
-    </ul>
-    <hr>
-    <ul>
-      <li id="current" class="active">Current Location</li>
-      <li id="multi-day">30 Day Track</li>
-    </ul>
-    <hr>
-    <ul>
-      <li><a href="/">Reset Map</a></li></ul>
+    <div id='menu-items'>
+      <ul>
+        <li class="show">Show Individuals</li>
+        <ul id="birds" style="display:none">
+          <li>117188<img class="zoom" src="img/glass.png"></li>
+          <li>126401<img class="zoom" src="img/glass.png"></li>
+          <li>126402<img class="zoom" src="img/glass.png"></li>
+          <li>126403<img class="zoom" src="img/glass.png"></li>
+          <li>126404<img class="zoom" src="img/glass.png"></li>
+          <li>117410<img class="zoom" src="img/glass.png"></li>
+          <li>126405<img class="zoom" src="img/glass.png"></li>
+          <li>126406<img class="zoom" src="img/glass.png"></li>
+          <li>126407<img class="zoom" src="img/glass.png"></li>
+        </ul>
+      </ul>
+      <hr>
+      <ul>
+        <li id="current" class="active">Current Location</li>
+        <li id="multi-day">30 Day Track</li>
+      </ul>
+      <hr>
+      <ul>
+        <li><a href="/">Reset Map</a></li>
+      </ul>
+    </div>
   </div>
 
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>

@@ -94,7 +94,6 @@ function movebankLoad(days, max_events_per_individual) {
     }
     for (i = 0; i < data.individuals.length; i++)
         showClosestPointInTime(data.individuals[i], endDate);
-
     });
 }
 
@@ -102,7 +101,7 @@ function createMarkers() {
     for (i = 0; i < data.individuals.length; i++) {
         data.individuals[i].marker = new google.maps.Marker({
             clickable: true,
-            draggable: true,
+            draggable: false,
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 fillOpacity: 0.7,
@@ -122,7 +121,6 @@ function createMarkers() {
                 showInfo(individual);
             };
         })(data.individuals[i]));
-        //data.individuals[i].marker.setVisible(false);
     }
     setBounds();
 }
@@ -138,6 +136,17 @@ function setBounds() {
     }
     map.fitBounds(bounds);
     map.setZoom(map.getZoom()-1);
+}
+
+function setIndividualBounds(id) {
+    var ind_bounds = new google.maps.LatLngBounds();
+    for (j = 0; j < data.individuals[id].locations.length; j++) {
+        ind_bounds.extend(new google.maps.LatLng(
+            data.individuals[id].locations[j].location_lat,
+            data.individuals[id].locations[j].location_long));
+    }
+    map.fitBounds(ind_bounds);
+    map.setZoom(map.getZoom()-2);
 }
 
 function createPolylines() {
@@ -371,8 +380,10 @@ function getPointClosestToLine(x1, y1, x2, y2, x3, y3) {
     };
 }
 
+/* not used for now */
 function displayBirds() {
     for (i=0;i<data.individuals.length;i++){
+        //$('#birds').append('<li onclick="markerClick(' + i + ');">' + data.individuals[i]['individual_local_identifier'] + '</li');
         $('#birds').append('<li onclick="markerClick(' + i + ');">' + data.individuals[i]['individual_local_identifier'] + '</li');
     }
 }
@@ -395,25 +406,51 @@ $('#current').on('click', function() {
         showCurrent();
         setBounds();
     }
+    $(this).toggleClass("active");
 });
 
 var birds_loaded = false;
 $('.show').on("click", function() {
-    if (!birds_loaded) {
-        displayBirds();
-        birds_loaded = true;
-    };
     $('#birds').slideToggle('fast');
+    $(this).toggleClass("active");
 });
 
 $('#multi-day').on("click", function() {
     hideCurrent();
     if(!$(this).hasClass('active')) {
-        $('#current').removeClass("active");
+        $('#current').toggleClass("active");
         movebankLoad(30, 3000);
     }
+    $(this).toggleClass("active");
 });
 
-$('li').on("click", function(){
-	$(this).toggleClass("active");
+$('#birds li').click(function() {
+    markerClick($(this).index());
+});
+
+$('#birds li').on('mouseover', function() {
+    $(this).find('img').css("display", "inline", "cursor", "pointer")
+});
+
+$('.zoom').click(function() {
+    /* setbounds */
+    console.log('zoom clicked');
+});
+
+$('.zoom').on('mouseover', function() {
+    
+});
+
+$('#locations').on("click", function(){
+    $(".locations").slideToggle('fast');
+});
+
+$('#ak').on("click", function() {
+    map.setCenter(new google.maps.LatLng(63.080839, -153.156509));
+    map.setZoom(4);
+});
+
+$('#mt').on("click", function() {
+    map.setCenter(new google.maps.LatLng(46.193179, -108.683222));
+    map.setZoom(6);
 });

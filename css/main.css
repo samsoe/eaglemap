@@ -71,7 +71,7 @@ a {
   padding: 20px;
   color: #878787;
   background-color: white;
-  box-shadow: inset 0 0 1px 7px gray;
+  box-shadow: inset 0 0 1px 8px lightgray;
 }
 
 .panel h1 {
@@ -145,4 +145,12 @@ li:hover {
 
 #birds li {
   width: 176px;
+}
+
+.zoom {
+  display: inline;
+  float: right;
+  padding: 5px 3px 0 0;
+  display: none;
+  cursor: pointer;
 }
