@@ -435,13 +435,9 @@ $('#birds li').on('mouseover', function() {
 });
 
 $('.zoom').click(function() {
-    /* setbounds */
-    console.log('zoom clicked');
+    map.setZoom(13);
 });
 
-$('.zoom').on('mouseover', function() {
-    
-});
 
 $('#locations').on("click", function(){
     $(".locations").slideToggle('fast');
