@@ -1,12 +1,10 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <title>RVRI Eagle Map</title>
-  <link rel="stylesheet" type="text/css"
-      href="http://fonts.googleapis.com/css?family=Roboto">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
   <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
@@ -25,6 +23,7 @@
   </div>
 
   <div id="map-canvas"></div>
+  <div id="target"></div>
 
   <a id="my-link" href="#my-panel"><img src="img/menu_icon.png"></a>
   <div id="my-panel" class="panel">
@@ -49,11 +48,11 @@
       <hr>
       <ul>
         <li id="current" class="active">Current Location</li>
-        <li id="multi-day">30 Day Track</li>
+        <li id="multi-day">30 Day Track<img class="zoom" src="img/loading.gif"></li>
       </ul>
       <hr>
       <ul>
-        <li><a href="/">Reset Map</a></li>
+        <li><a href="index.html">Reset Map</a></li>
       </ul>
     </div>
   </div>

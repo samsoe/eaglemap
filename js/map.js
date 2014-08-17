@@ -1,7 +1,6 @@
-
 /*** 
  ::: Eagle Map w/ git 
- ::: Active Development 07/22 mailto:esamsoe@gmail.com 
+ ::: Active Development 08/17 mailto:esamsoe@gmail.com 
 ***/
 
 var map;
@@ -16,9 +15,9 @@ var individual_local_identifiers = [117184, 117188, 117410, 126401, 126402, 1264
 var individual_local_names = ["117184", "117188", "117410", "126401", "126402", "126403", "126404", "126405", "126406", "126407"];
 var colors = ["green", "purple", "red", "yellow", "blue", "green", "orange", "pink", "lightblue", "brown"];
 
-var days = 3;
+var days = 1;
 var now = new Date();
-var timestamp_end = now.setDate(now.getDate() - 3);
+var timestamp_end = now.setDate(now.getDate() - 1);
 var timestamp_start = now.setDate(now.getDate() - days);
 
 var max_events_per_individual = 10;
@@ -181,7 +180,6 @@ function createPolylines() {
             };
         })(data.individuals[i]));
 
-        //console.log(data.individuals[i].locations.length);
     }
 }
 
@@ -191,6 +189,8 @@ function showCurrent() {
         data.individuals[i].marker.setVisible(true);
         data.individuals[i].polyline.setMap(map);
     }
+
+    $('#multi-day img').css("display", "none");
 }
 
 function showClosestPointInTime(individual, t) {
@@ -396,7 +396,6 @@ function hideCurrent() {
 }
 
 function markerClick(id) {
-    console.log(id);
     google.maps.event.trigger(data.individuals[id].marker, 'click');
 }
 
@@ -418,10 +417,12 @@ $('.show').on("click", function() {
 
 $('#multi-day').on("click", function() {
     hideCurrent();
+    $(this).find('img').css("display", "inline", "cursor", "pointer");
     if(!$(this).hasClass('active')) {
         $('#current').toggleClass("active");
         movebankLoad(30, 3000);
     }
+
     $(this).toggleClass("active");
 });
 
@@ -433,7 +434,7 @@ $('#birds li').click(function() {
 });
 
 $('#birds li').on('mouseover', function() {
-    $(this).find('img').css("display", "inline", "cursor", "pointer")
+    $(this).find('img').css("display", "inline", "cursor", "pointer");
 });
 
 $('.zoom').click(function() {
