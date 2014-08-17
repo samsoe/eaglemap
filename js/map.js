@@ -21,7 +21,7 @@ var timestamp_end = now.setDate(now.getDate() - 1);
 var timestamp_start = now.setDate(now.getDate() - days);
 
 var max_events_per_individual = 10;
-var loaded = false;
+var loaded30 = false;
 
 $(document).ready(function($) {
 	var mapOptions = {
@@ -184,7 +184,6 @@ function createPolylines() {
 }
 
 function showCurrent() {
-    // data.individuals[i].marker.setVisible(true);
     for (i = 0; i < data.individuals.length; i++) {
         data.individuals[i].marker.setVisible(true);
         data.individuals[i].polyline.setMap(map);
@@ -233,7 +232,7 @@ function showClosestPointInTime(individual, t) {
     individual.marker.timestamp = t;
     if (individual.marker.getMap() == null)
         individual.marker.setMap(map);
-    gracePeriod = 1000 * 60 * 60 * 24 * 2;
+    gracePeriod = 1000 * 60 * 60 * 24 * 10;
     if (t + gracePeriod < individual.locations[0].timestamp || t - gracePeriod > individual.locations[individual.locations.length - 1].timestamp)
         individual.marker.setMap(null);
 }
@@ -418,12 +417,15 @@ $('.show').on("click", function() {
 $('#multi-day').on("click", function() {
     hideCurrent();
     $(this).find('img').css("display", "inline", "cursor", "pointer");
-    if(!$(this).hasClass('active')) {
-        $('#current').toggleClass("active");
-        movebankLoad(30, 3000);
+    if(!loaded30) {
+        if(!$(this).hasClass('active')) {
+            $('#current').toggleClass("active");
+            movebankLoad(30, 3000);
+        }
     }
 
     $(this).toggleClass("active");
+    loaded30 = true;
 });
 
 $('#birds li').click(function() {
