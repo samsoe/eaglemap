@@ -232,7 +232,7 @@ function showClosestPointInTime(individual, t) {
     individual.marker.timestamp = t;
     if (individual.marker.getMap() == null)
         individual.marker.setMap(map);
-    gracePeriod = 1000 * 60 * 60 * 24 * 10;
+    gracePeriod = 1000 * 60 * 60 * 24 * 20;
     if (t + gracePeriod < individual.locations[0].timestamp || t - gracePeriod > individual.locations[individual.locations.length - 1].timestamp)
         individual.marker.setMap(null);
 }
@@ -399,10 +399,14 @@ function markerClick(id) {
 }
 
 $('#current').on('click', function() {
-    if($('#current').hasClass('active')) {
+    $('#multi-day').removeClass('active');
+    if($(this).hasClass('active')) {
         hideCurrent();
     } else {
-        showCurrent();
+        for (i = 0; i < data.individuals.length; i++) {
+            data.individuals[i].marker.setVisible(true);
+            data.individuals[i].polyline.setMap(null);
+        }
         setBounds();
     }
     $(this).toggleClass("active");
@@ -416,16 +420,23 @@ $('.show').on("click", function() {
 
 $('#multi-day').on("click", function() {
     hideCurrent();
+    $('#current').removeClass('active');
     $(this).find('img').css("display", "inline", "cursor", "pointer");
     if(!loaded30) {
         if(!$(this).hasClass('active')) {
-            $('#current').toggleClass("active");
             movebankLoad(30, 3000);
+            loaded30 = true;
         }
+    } else {
+        showCurrent();
     }
 
-    $(this).toggleClass("active");
-    loaded30 = true;
+    if($(this).hasClass("active")) {
+        $(this).removeClass("active");
+        hideCurrent();
+    } else {
+        $(this).addClass("active");
+    }
 });
 
 $('#birds li').click(function() {
@@ -442,7 +453,6 @@ $('#birds li').on('mouseover', function() {
 $('.zoom').click(function() {
     map.setZoom(13);
 });
-
 
 $('#locations').on("click", function(){
     $(".locations").slideToggle('fast');
