@@ -12,9 +12,9 @@ var data;
 
 var jsonUrl = "http://www.movebank.org/movebank/service/public/json";
 var study_id = 17707607;
-var individual_local_identifiers = [117188, 117410, 126401, 126402, 126403, 126404, 126405, 126406, 126407];
-var individual_local_names = ["117188", "117410", "126401", "126402", "126403", "126404", "126405", "126406", "126407"];
-var colors = ["purple", "red", "yellow", "blue", "green", "orange", "pink", "lightblue", "brown"];
+var individual_local_identifiers = [117184, 117188, 117410, 126401, 126402, 126403, 126404, 126405, 126406, 126407];
+var individual_local_names = ["117184", "117188", "117410", "126401", "126402", "126403", "126404", "126405", "126406", "126407"];
+var colors = ["green", "purple", "red", "yellow", "blue", "green", "orange", "pink", "lightblue", "brown"];
 
 var days = 3;
 var now = new Date();
@@ -396,6 +396,7 @@ function hideCurrent() {
 }
 
 function markerClick(id) {
+    console.log(id);
     google.maps.event.trigger(data.individuals[id].marker, 'click');
 }
 
@@ -426,7 +427,8 @@ $('#multi-day').on("click", function() {
 
 $('#birds li').click(function() {
     var i = $(this).index();
-    map.setCenter(new google.maps.LatLng(data.individuals[i].locations[0]['location_lat'], data.individuals[i].locations[0]['location_long']))
+    var most_recent = data.individuals[i].locations.length - 1;
+    map.setCenter(new google.maps.LatLng(data.individuals[i].locations[most_recent]['location_lat'], data.individuals[i].locations[most_recent]['location_long']))
     markerClick(i);
 });
 
