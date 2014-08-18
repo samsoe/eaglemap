@@ -454,6 +454,10 @@ $('.zoom').click(function() {
     map.setZoom(13);
 });
 
+$('#viewall').click(function() {
+    setBounds();
+});
+
 $('#locations').on("click", function(){
     $(".locations").slideToggle('fast');
 });
