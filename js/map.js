@@ -13,7 +13,7 @@ var jsonUrl = "http://www.movebank.org/movebank/service/public/json";
 var study_id = 17707607;
 var individual_local_identifiers = [117184, 117188, 117410, 126401, 126402, 126403, 126404, 126405, 126406, 126407];
 var individual_local_names = ["117184", "117188", "117410", "126401", "126402", "126403", "126404", "126405", "126406", "126407"];
-var colors = ["green", "purple", "red", "yellow", "blue", "green", "orange", "pink", "lightblue", "brown"];
+var colors = ["green", "purple", "red", "yellow", "blue", "green", "orange", "blue", "lightblue", "brown"];
 
 var days = 1;
 var now = new Date();
@@ -451,7 +451,7 @@ $('#birds li').on('mouseover', function() {
 });
 
 $('.zoom').click(function() {
-    map.setZoom(13);
+    map.setZoom(12);
 });
 
 $('#viewall').click(function() {
